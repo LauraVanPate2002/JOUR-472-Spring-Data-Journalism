@@ -83,7 +83,7 @@ In this notebook, we are reverse engineering five sentences from the story.
 
 # Display results of code below this codeblock
 
-About 72.9 percent of deep pocket dontations went to Republicans, and about 21.5 percent went to Deomcrats.A total of 34246016 donated to Republicans and a total of 10113639 donated to Democrats.
+About 72.9 percent of deep pocket dontations went to Republicans, and about 21.5 percent went to Deomcrats.A total of 34246016 donated to Republicans and a total of 10113639 donated to Democrats. We all had the same data. 
 
 
 
