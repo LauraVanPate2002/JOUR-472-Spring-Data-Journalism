@@ -23,6 +23,7 @@ knitr::opts_chunk$set(echo = TRUE)
 options(scipen=999)
 library(tidyverse)
 
+
 ```
 
 ## PDF Parsing with Tabula
