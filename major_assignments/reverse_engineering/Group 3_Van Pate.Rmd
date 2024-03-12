@@ -29,6 +29,7 @@ Loading required libraries for this analysis.
 library(tidyverse)
 library(janitor)
 library(lubridate)
+library(readr) 
 ```
 
 ## Load and Cleaning Data
@@ -40,6 +41,7 @@ In this section, describe the source of the data, write a basic data dictionary 
 
 # Path to data should be loaded from folder "data" i.e. read_csv("data/name_of_data.csv")
 donation_data <- read_csv ("data/sports-political-donations.csv")
+|> clean_names() 
 
 # Clean required data and prepare for analysis if needed. 
 
@@ -83,7 +85,7 @@ In this notebook, we are reverse engineering five sentences from the story.
 
 # Display results of code below this codeblock
 
-About 72.9 percent of deep pocket dontations went to Republicans, and about 21.5 percent went to Deomcrats.A total of 34246016 donated to Republicans and a total of 10113639 donated to Democrats. We all had the same data. 
+#About 72.9 percent of deep pocket dontations went to Republicans, and about 21.5 percent went to Deomcrats.A total of 34246016 donated to Republicans and a total of 10113639 donated to Democrats. We all had the same data. 
 
 
 
@@ -98,6 +100,18 @@ About 72.9 percent of deep pocket dontations went to Republicans, and about 21.5
 
 ```{r}
 # Put code to reverse engineer sentence here
+#But while that overall summary is interesting, a more pronounced signal begins to emerge when we look more closely at this group’s larger political donations. There are 40 owners who have donated at least $100,000 to Republican causes over the six-year period. 
+
+ Republican_party_donations <- party_donations |>
+   filter(new_party == "Republican") |>
+    group_by(Owner) |>
+    summarise(total_amount = sum(new_amount)) |>
+    filter(total_amount >= 100000)
+  
+  
+
+
+We were not able to replicate this finding because our anaylsis gave us 37 and the story says 40. We're not sure if it's an error on our part or if there's an error on there's, but it's a close number between our data and there's and it's possible there was a miscommunication.
 
 # Display results of code below this codeblock
 
@@ -110,7 +124,14 @@ About 72.9 percent of deep pocket dontations went to Republicans, and about 21.5
 
 ```{r}
 # Put code to reverse engineer sentence here
-
+#23 owners topping $100,000 to Democrats, helping lead to these splits
+ Democrat_party_donations <- party_donations |>
+   filter(new_party == "Democrat") |>
+   group_by(Owner) |>
+    summarise(total_amount = sum(new_amount)) |>
+    filter(total_amount >= 100000)
+  
+According to the data, there were 23 Democrat Donations and on our end we got 22. Similar to the Republican data we had close numbers with the story, but we were one off this time. We're not sure if it's us with incorrect data or them, or if it's a miscommunication.'
 # Display results of code below this codeblock
 
 ```
