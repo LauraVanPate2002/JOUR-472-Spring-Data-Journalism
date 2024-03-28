@@ -1,7 +1,7 @@
 ---
 title: "Reverse Engineering Project"
-author: "Student names here"
-date: "Date here"
+author: "Laura Van Pate"
+date: "3/28/2024"
 output:
   html_document:
     theme: cerulean
@@ -40,9 +40,20 @@ In this section, describe the source of the data, write a basic data dictionary 
 # Load required data
 
 # Path to data should be loaded from folder "data" i.e. read_csv("data/name_of_data.csv")
-donation_data <- read_csv ("data/sports-political-donations.csv")
-|> clean_names() 
+donation_data <- read_csv ("data/sports-political-donations.csv")|> 
 
+  clean_names() 
+
+party_donations <- donation_data |>
+  mutate (
+    new_party = case_when(
+      party == 'Republican' ~ 'Republican',
+      party == 'Democrat' ~ 'Democrat' ,
+      .default  = 'Bipartisan'
+      )
+    ) |>
+    mutate(new_amount = parse_number(amount)) |>
+    mutate(recipient = str_to_upper(recipient))
 # Clean required data and prepare for analysis if needed. 
 
 
@@ -54,25 +65,17 @@ In this notebook, we are reverse engineering five sentences from the story.
 
 ### Sentence 1
 
--   **Sentence text**: [Paste in sentence to engineer here]
+-   **Sentence text**: [Paste in sentence to engineer here] this deep-pocketed group has sent \$34.2 million (72.9 percent) to Republican campaigns or super PACs purely supporting Republican causes, compared to \$10.1 million (21.5 percent) to Democrats over the past three elections. Less than 6 percent of contributions went to bipartisan or unaffiliated recipients."
 
--   **Analysis summary**: [Write up two to three sentences describing the results of your analysis. Were you able to confirm the finding? If not, why not?]
+-   **Analysis summary**: [Write up two to three sentences describing the results of your analysis. Were you able to confirm the finding? If not, why not?] About 72.9 percent of deep pocket dontations went to Republicans, and about 21.5 percent went to Deomcrats.A total of 34246016 donated to Republicans and a total of 10113639 donated to Democrats. We all had the same data.About 72.9 percent of deep pocket dontations went to Republicans, and about 21.5 percent went to Deomcrats.A total of 34246016 donated to Republicans and a total of 10113639 donated to Democrats. We all had the same data.
 
 ```{r}
 # Put code to reverse engineer sentence here
-#this deep-pocketed group has sent $34.2 million (72.9 percent) to Republican campaigns or super PACs purely supporting Republican causes, compared to $10.1 million (21.5 percent) to Democrats over the past three elections. 
-  party_donations <- donation_data |>
-  mutate (
-    new_party = case_when(
-      Party == 'Republican' ~ 'Republican',
-      Party == 'Democrat' ~ 'Democrat' ,
-      .default  = 'Bipartisan'
-      )
-    ) |>
-    mutate(new_amount = parse_number(Amount))
+#
+
   
   party_donations |>
-    group_by(Party) |>
+    group_by(new_party) |>
     summarise(
       total_amount = sum(new_amount)
     ) |>
@@ -85,7 +88,7 @@ In this notebook, we are reverse engineering five sentences from the story.
 
 # Display results of code below this codeblock
 
-#About 72.9 percent of deep pocket dontations went to Republicans, and about 21.5 percent went to Deomcrats.A total of 34246016 donated to Republicans and a total of 10113639 donated to Democrats. We all had the same data. 
+#
 
 
 
@@ -95,23 +98,24 @@ In this notebook, we are reverse engineering five sentences from the story.
 
 ### Sentence 2
 
--   **Sentence text**: [Paste in sentence to engineer here]
--   **Analysis summary**: [Write up two to three sentences describing the results of your analysis. Were you able to confirm the finding? If not, why not?]
+-   **Sentence text**: But while that overall summary is interesting, a more pronounced signal begins to emerge when we look more closely at this group’s larger political donations. There are 40 owners who have donated at least \$100,000 to Republican causes over the six-year period.But while that overall summary is interesting, a more pronounced signal begins to emerge when we look more closely at this group’s larger political donations. There are 40 owners who have donated at least \$100,000 to Republican causes over the six-year period.
+-   **Analysis summary**: I was able to confirm this finding. At first, I thought the data was missing something because the table came out to have only 37 owners. I realized this was due to some of the owners donating together (like wife and husband), so if you count each individual there are 40.
 
 ```{r}
 # Put code to reverse engineer sentence here
-#But while that overall summary is interesting, a more pronounced signal begins to emerge when we look more closely at this group’s larger political donations. There are 40 owners who have donated at least $100,000 to Republican causes over the six-year period. 
+#
 
- Republican_party_donations <- party_donations |>
-   filter(new_party == "Republican") |>
-    group_by(Owner) |>
-    summarise(total_amount = sum(new_amount)) |>
-    filter(total_amount >= 100000)
+ republican_donations <- party_donations |>
+   filter(str_detect(party, 'Republican')) |>
+    group_by(owner) |>
+    summarise(
+      total_donations = sum(new_amount),
+     ) |>
+    filter(total_donations >= 100000) |>
+   arrange(desc(total_donations))
   
-  
 
 
-We were not able to replicate this finding because our anaylsis gave us 37 and the story says 40. We're not sure if it's an error on our part or if there's an error on there's, but it's a close number between our data and there's and it's possible there was a miscommunication.
 
 # Display results of code below this codeblock
 
@@ -119,30 +123,41 @@ We were not able to replicate this finding because our anaylsis gave us 37 and t
 
 ### Sentence 3
 
--   **Sentence text**: [Paste in sentence to engineer here]
--   **Analysis summary**: [Write up two to three sentences describing the results of your analysis. Were you able to confirm the finding? If not, why not?]
+-   **Sentence text**: 23 owners topping \$100,000 to Democrats, helping lead to these splits
+-   **Analysis summary**: According to the data, there were 23 Democrat Donations and on our end we got 22, but we didn't take into account owners that donated with their spouse.
 
 ```{r}
 # Put code to reverse engineer sentence here
-#23 owners topping $100,000 to Democrats, helping lead to these splits
- Democrat_party_donations <- party_donations |>
-   filter(new_party == "Democrat") |>
-   group_by(Owner) |>
-    summarise(total_amount = sum(new_amount)) |>
-    filter(total_amount >= 100000)
-  
-According to the data, there were 23 Democrat Donations and on our end we got 22. Similar to the Republican data we had close numbers with the story, but we were one off this time. We're not sure if it's us with incorrect data or them, or if it's a miscommunication.'
-# Display results of code below this codeblock
+#
+ democrat_donations <- party_donations |>
+   filter(str_detect(party, "Democrat")) |>
+   group_by(owner) |>
+    summarise(total_donations = sum(new_amount)) |>
+    filter(total_donations >= 100000) |>
+    arrange(desc(total_donations))
 
 ```
 
 ### Sentence 4
 
--   **Sentence text**: [Paste in sentence to engineer here]
--   **Analysis summary**: [Write up two to three sentences describing the results of your analysis. Were you able to confirm the finding? If not, why not?]
+-   **Sentence text**: MLB owners have donated the most
+-   **Analysis summary**: We were able to show in our analysis that MLB owners have donated the most compared to owners from other leagues. One discrepancy between our analysis and the one in the story is that the amounts in each category are slightly less. This is likely due to the fact that when we cleaned up the data, we noticed that many donations were categorized as "Bipartisan but mostly specific party)." So, we mutated a new column to label all of those as Bipartisan for cleaner analysis. Because of this, our amounts are slightly off from the story because they don't account for those donations in any specific party.
 
 ```{r}
 # Put code to reverse engineer sentence here
+#
+party_donations |>
+  group_by(league) |>
+  summarise(
+    total_democratic = sum(new_amount[new_party == 'Democrat']),
+    total_republican = sum(new_amount[new_party == 'Republican']),
+    total_donations = sum(new_amount)
+  ) |>
+  arrange(desc(total_donations))
+
+
+
+
 
 # Display results of code below this codeblock
 
@@ -150,12 +165,16 @@ According to the data, there were 23 Democrat Donations and on our end we got 22
 
 ### Sentence 5
 
--   **Sentence text**: [Paste in sentence to engineer here]
--   **Analysis summary**: [Write up two to three sentences describing the results of your analysis. Were you able to confirm the finding? If not, why not?]
+-   **Sentence text**: Thirteen owners have contributed directly to Trump’s campaign or Trump super PACs in the 2020 election cycle, with contributions adding up to \$1,746,423. That list of owners includes:
+-   **Analysis summary**: We were not able to replicate this finding. We found 12 of the 13 owners mentioned in the article that donated directly to Trump's campaign in the 2020 election cycle. We could not find Carolina Hurricane owner Peter Karmanos' donations to Trump. When filtering through his name on the entire table, we could not find any of donations with a recipient of Trump or his campaign. This is why his name did not appear on this specific list. This is why there is a \$202,002 discrepancy between the total amount we found and the one mentioned in the story.
 
 ```{r}
 # Put code to reverse engineer sentence here
+#
 
+party_donations |>
+filter(election_year == 2020 & (str_detect(recipient, "TRUMP"))) |>
+  mutate(total_donations = sum(new_amount))
 # Display results of code below this codeblock
 
 ```
