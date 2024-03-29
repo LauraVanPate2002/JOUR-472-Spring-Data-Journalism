@@ -102,11 +102,35 @@ moco_pop_overdose <- moco_pop_overdose |>
 
 **Q4** Using [CensusReporter.org](https://censusreporter.org/), examine the zip codes with the highest and lowest rates and compare and contrast their demographic profiles. Is there a story here?
 
-**A4**
+**A4. I looked through the zip codes on Census Reporter.org and I'm not a hundred percent sure this could be a story, but something that I was interested in was comparing and contrasting zip codes in cities between good neighborhoods and bad neighborhoods. An example would be comparing West Baltimore, to Fed Hill. I think it could be interesting just to see how people live in both parts of the same city and have a compare and contrast between crime rates.**
 
 **Q5** Go back to your joined dataframe from Q3 and add two more columns representing the minimum and maximum populations based on the estimate and margin of error, then calculate per capita rates for each. Do you get the same two zip codes for the highest and lowest as you did before? Does that give you more or less confidence in your answers to Q3?
 
-**A5**
+**A5. I tried to get the data for maxium vs minium, but it wouldn't work and I wasn't able to get it. In my previous zip overdose sheet I got that the most calls was 62 to the ship code 20874 and the least amount was 1 call with five zip codes having the same number. I am confident with the answer for number three because the data is laid out clear in my opinion, but there might be some dirty data that I didn't know about that gave me the wrong answer.**
 
 ```{r}
+montgomery_overdose_calls <- read_csv('data/montgomery_2022_overdoses.csv')
+
+montgomery_zip_overdose <- montgomery_overdose_calls |> mutate(zip = as.character(zip)) |>
+  group_by(zip) |>
+  summarize(total_calls = n()) |>
+  arrange(desc(total_calls))
+
+md_zcta_pop <- get_acs(geography = 'zcta', variables ='B09021_001', state='MD', year= 2019)
+
+moco_pop_overdose <- montgomery_zip_overdose |> inner_join(md_zcta_pop, by=c('zip' = 'GEOID'))
+
+moco_pop_overdose <- moco_pop_overdose |>
+  mutate(rate_per_1k = (total_calls/estimate)*1000) |>
+  arrange(desc(rate_per_1k))
+
+moco_pop_max <- md_zcta_pop |>
+  mutate(maxium) |>
+  arrange(desc)
+  
+moco_pop_min <- md_zcta_pop |>
+mutate(minium) |>
+arrange(desc)
+
+ 
 ```
