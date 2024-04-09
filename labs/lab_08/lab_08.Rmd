@@ -86,15 +86,37 @@ Describe the pattern of results; you may want to look at the data to dig into pa
 **A2.**
 
 ```{r}
+#Find the total number of calls
+Total_Calls <- PG_Calls |>
+  group_by(month) |>
+  summarize(total_calls = n()/1397*100) |>
+  arrange(desc(total_calls)) |>
+  mutate(pct_total = total_calls)
+ 
 
 ```
 
 ```{r}
-
+Total_Calls <- PG_Calls |>
+  ggplot() +
+  geom_bar(aes(x=reorder(month,pct_total),weight=pct_total)) +
+  coord_flip() +
+  labs(
+    title = 'Total_Emergency_Calls',
+   
 ```
 
 ```{r}
-
+ PG_Calls |>
+  ggplot() +
+  geom_bar(aes(x=reorder(month,pct_total),weight=pct_total)) +
+  coord_flip() +
+  labs(
+    title = 'Total Emergency Calls',
+    x = 'month',
+    y = 'percentage of calls',
+    caption = 'source: PG County EMS'
+  )
 ```
 
 **Q3.** A scatterplot is a type of chart that helps us see relationships between two variables. One variable goes on the x axis, the other on the y axis. For each row/observation in our data, a scatterplot puts a circle (or a "point") where the two variables intersect on a grid.
