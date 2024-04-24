@@ -1,0 +1,141 @@
+---
+title: "Data Anaylsis Project"
+author: "Laura Van Pate"
+date: "4/23/2020"
+output:
+  html_document:
+    theme: cerulean
+    highlight: pygments
+    toc: true
+    toc_float:
+      collapsed: true
+      smooth_scroll: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+
+In this notebook, we are reverse engineering the story, [STORY NAME](STORY%20URL)
+
+## Load libraries
+
+Loading required libraries for this analysis.
+
+```{r echo=FALSE, message=FALSE}
+
+library(tidyverse)
+library(janitor)
+library(lubridate)
+library(readr) 
+```
+
+## Load and Cleaning Data
+
+In this section, describe the source of the data, write a basic data dictionary for data you are working with, and discuss any caveats or issues you discovered working with this data.
+
+```{r}
+# Load required data
+wbb_2020 <- read_csv('data/wbb_rosters_2020_21.csv') |> clean_names()
+
+wbb_2021 <-read_csv('data/wbb_rosters_2021_22.csv') |> clean_names()
+
+wbb_2022 <-read_csv('data/wbb_rosters_2022_23.csv') |> clean_names()
+
+wbb_2023 <-read_csv('data/wbb_rosters_2023_24.csv') |> clean_names()
+
+wbb_crosswalk <-read_csv('data/wbb_rosters23_crosswalk.csv') |> clean_names()
+# Path to data should be loaded from folder "data" i.e. read_csv(
+# Clean required data and prepare for analysis if needed. 
+
+
+```
+
+## Sentences to Engineer
+
+In this notebook, we are reverse engineering five sentences from the story.
+
+### Sentence 1
+
+-   **Sentence text**: [What is the average height of players of each year]
+
+-   **Analysis summary**: [Write up two to three sentences describing the results of your analysis. Were you able to confirm the finding? If not, why not?]
+
+```{r}
+# Put code to data anaylsis sentence here
+#
+wbb_2020
+filter(height_clean) |>
+group_by(names) |>
+summuarize(=sum(height_clean))
+
+
+# Display results of code below this codeblock
+
+#
+
+
+
+
+
+```
+
+### Sentence 2
+
+-   **Sentence text**: But while that overall summary is interesting, a more pronounced signal begins to emerge when we look more closely at this group’s larger political donations. There are 40 owners who have donated at least \$100,000 to Republican causes over the six-year period.But while that overall summary is interesting, a more pronounced signal begins to emerge when we look more closely at this group’s larger political donations. There are 40 owners who have donated at least \$100,000 to Republican causes over the six-year period.
+-   **Analysis summary**: I was able to confirm this finding. At first, I thought the data was missing something because the table came out to have only 37 owners. I realized this was due to some of the owners donating together (like wife and husband), so if you count each individual there are 40.
+
+```{r}
+# Put code to reverse engineer sentence here
+#
+
+ 
+
+
+
+# Display results of code below this codeblock
+
+```
+
+### Sentence 3
+
+-   **Sentence text**: 23 owners topping \$100,000 to Democrats, helping lead to these splits
+-   **Analysis summary**: According to the data, there were 23 Democrat Donations and on our end we got 22, but we didn't take into account owners that donated with their spouse.
+
+```{r}
+# Put code to reverse engineer sentence here
+#
+ 
+```
+
+### Sentence 4
+
+-   **Sentence text**: MLB owners have donated the most
+-   **Analysis summary**: We were able to show in our analysis that MLB owners have donated the most compared to owners from other leagues. One discrepancy between our analysis and the one in the story is that the amounts in each category are slightly less. This is likely due to the fact that when we cleaned up the data, we noticed that many donations were categorized as "Bipartisan but mostly specific party)." So, we mutated a new column to label all of those as Bipartisan for cleaner analysis. Because of this, our amounts are slightly off from the story because they don't account for those donations in any specific party.
+
+```{r}
+# Put code to reverse engineer sentence here
+#
+
+
+
+# Display results of code below this codeblock
+
+```
+
+### Sentence 5
+
+-   **Sentence text**: Thirteen owners have contributed directly to Trump’s campaign or Trump super PACs in the 2020 election cycle, with contributions adding up to \$1,746,423. That list of owners includes:
+-   **Analysis summary**: We were not able to replicate this finding. We found 12 of the 13 owners mentioned in the article that donated directly to Trump's campaign in the 2020 election cycle. We could not find Carolina Hurricane owner Peter Karmanos' donations to Trump. When filtering through his name on the entire table, we could not find any of donations with a recipient of Trump or his campaign. This is why his name did not appear on this specific list. This is why there is a \$202,002 discrepancy between the total amount we found and the one mentioned in the story.
+
+```{r}
+# Put code to reverse engineer sentence here
+#
+
+# Display results of code below this codeblock
+
+```
+
+-30-
