@@ -1,7 +1,7 @@
 ---
 title: "Data Anaylsis Project"
 author: "Laura Van Pate"
-date: "4/23/2020"
+date: "4/23/2024"
 output:
   html_document:
     theme: cerulean
@@ -18,7 +18,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Introduction
 
-In this notebook, we are reverse engineering the story, [STORY NAME](STORY%20URL)
+In this notebook, we are data anaylsising the story, [STORY NAME](STORY%20URL)
 
 ## Load libraries
 
