@@ -61,15 +61,24 @@ In this notebook, we are reverse engineering five sentences from the story.
 
 -   **Sentence text**: [What is the average height of players of each year]
 
--   **Analysis summary**: [Write up two to three sentences describing the results of your analysis. Were you able to confirm the finding? If not, why not?]
+-   **Analysis summary**: [So far the year 2020 had the highest average of players with 81 inches, and each year had a group of cities tied for the highest average of height, such as Rio, Brazil, Miami, Flordia, and Appleton, Wisconsin. A problem we had was we couldn't load 2021 because there was no total inches column. We also had problems with finding height and feet]
 
 ```{r}
 # Put code to data anaylsis sentence here
 #
-wbb_2020
-filter(height_clean) |>
-group_by(names) |>
-summuarize(=sum(height_clean))
+wbb_2020_height_per_town <- wbb_2020 |>
+  group_by(hometown_clean) |> summarize(Avg_height_per_town = mean (total_inches)) |> arrange(desc(Avg_height_per_town)) 
+
+wbb_2021_height_per_town <- wbb_2021 |>
+  group_by(hometown_clean) |> mutate(total_inches) |> summarize(Avg_height_per_town = mean (total_inches)) |> arrange(desc(Avg_height_per_town)) 
+
+wbb_2022_height_per_town <- wbb_2022 |>
+   group_by(hometown_clean) |> mutate(total_inches) |> summarize(Avg_height_per_town = mean (total_inches)) |> arrange(desc(Avg_height_per_town)) 
+
+wbb_2023_height_per_town <- wbb_2023 |>
+  group_by(hometown_clean) |> mutate(total_inches) |> summarize(Avg_height_per_town = mean (total_inches)) |> arrange(desc(Avg_height_per_town)) 
+
+
 
 
 # Display results of code below this codeblock
@@ -84,14 +93,27 @@ summuarize(=sum(height_clean))
 
 ### Sentence 2
 
--   **Sentence text**: But while that overall summary is interesting, a more pronounced signal begins to emerge when we look more closely at this group’s larger political donations. There are 40 owners who have donated at least \$100,000 to Republican causes over the six-year period.But while that overall summary is interesting, a more pronounced signal begins to emerge when we look more closely at this group’s larger political donations. There are 40 owners who have donated at least \$100,000 to Republican causes over the six-year period.
--   **Analysis summary**: I was able to confirm this finding. At first, I thought the data was missing something because the table came out to have only 37 owners. I realized this was due to some of the owners donating together (like wife and husband), so if you count each individual there are 40.
+-   **Sentence text**: We wanted to find out how many women's basketball players played a certain position from the years 2020-2023.
+-   **Analysis summary**: We were able to figure out that in 2020, Guard was the position with the most members with 7,670. Guard was the highest again in 2021 with 8,109. Guard was again the highest in 2022 with 8,305. And in 2023, Guard was yet again the highest position with 8,282.
 
 ```{r}
 # Put code to reverse engineer sentence here
 #
+wbb_positions_2020 <- wbb_2020 |>
+  group_by(position_clean) |>
+  summarize(count = n())
 
- 
+wbb_positions_2021 <- wbb_2021 |>
+  group_by(position_clean) |>
+  summarize(count = n())
+
+wbb_positions_2022 <- wbb_2022 |>
+  group_by(position_clean) |>
+  summarize(count = n())
+
+wbb_positions_2023 <- wbb_2023 |>
+  group_by(position_clean) |>
+  summarize(count = n())
 
 
 
