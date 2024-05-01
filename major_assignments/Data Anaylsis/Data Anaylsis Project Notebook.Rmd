@@ -61,22 +61,23 @@ In this notebook, we are reverse engineering five sentences from the story.
 
 -   **Sentence text**: [What is the average height of players of each year]
 
--   **Analysis summary**: [So far the year 2020 had the highest average of players with 81 inches, and each year had a group of cities tied for the highest average of height, such as Rio, Brazil, Miami, Flordia, and Appleton, Wisconsin. A problem we had was we couldn't load 2021 because there was no total inches column. We also had problems with finding height and feet]
+-   **Analysis summary**: [So far the year 2020 had the highest average of players with 81 inches, and each year had a group of cities tied for the highest average of height, such as Rio, Brazil, Miami, Flordia, and Appleton, Wisconsin. A problem we had was we couldn't load 2021 because there was no total inches column. When doing the feet in 2020, the largest height was 6.75 feet. In 2022 and 2023 the largest height was 6.583 ft.
 
 ```{r}
 # Put code to data anaylsis sentence here
 #
 wbb_2020_height_per_town <- wbb_2020 |>
-  group_by(hometown_clean) |> summarize(Avg_height_per_town = mean (total_inches)) |> arrange(desc(Avg_height_per_town)) 
+  group_by(hometown_clean) |> summarize(Avg_height_per_town = mean (total_inches)) |> arrange(desc(Avg_height_per_town)) |>
+  mutate(feet = Avg_height_per_town/12)
 
-wbb_2021_height_per_town <- wbb_2021 |>
-  group_by(hometown_clean) |> mutate(total_inches) |> summarize(Avg_height_per_town = mean (total_inches)) |> arrange(desc(Avg_height_per_town)) 
 
 wbb_2022_height_per_town <- wbb_2022 |>
-   group_by(hometown_clean) |> mutate(total_inches) |> summarize(Avg_height_per_town = mean (total_inches)) |> arrange(desc(Avg_height_per_town)) 
+   group_by(hometown_clean) |> mutate(total_inches) |> summarize(Avg_height_per_town = mean (total_inches)) |> arrange(desc(Avg_height_per_town)) |>
+  mutate(feet = Avg_height_per_town/12)
 
 wbb_2023_height_per_town <- wbb_2023 |>
-  group_by(hometown_clean) |> mutate(total_inches) |> summarize(Avg_height_per_town = mean (total_inches)) |> arrange(desc(Avg_height_per_town)) 
+  group_by(hometown_clean) |> mutate(total_inches) |> summarize(Avg_height_per_town = mean (total_inches)) |> arrange(desc(Avg_height_per_town)) |>
+  mutate(feet = Avg_height_per_town/12)
 
 
 
@@ -123,19 +124,28 @@ wbb_positions_2023 <- wbb_2023 |>
 
 ### Sentence 3
 
--   **Sentence text**: 23 owners topping \$100,000 to Democrats, helping lead to these splits
--   **Analysis summary**: According to the data, there were 23 Democrat Donations and on our end we got 22, but we didn't take into account owners that donated with their spouse.
+-   **Sentence text**: In the years 2022 and 2023, how many teams had more than 1 redshirt on their team? What team had the most, and where are they from
+-   **Analysis summary**: In 2022 Grand Valley State in Michigan had the most red shirts with 12 and in 2023 Biola in California had the most red shirts 10.
 
 ```{r}
 # Put code to reverse engineer sentence here
+redshirt_22 <-wbb_2022 |>
+  group_by(team, team_state) |>
+  summarise(redshirt_numbers = sum(redshirt)) |> arrange(desc (redshirt_numbers)) |>
+  filter(redshirt_numbers > 1)
+
+redshirt_23 <- wbb_2023 |>
+  group_by(team, team_state) |>
+  summarise(redshirt_count = sum(redshirt)) |> arrange(desc (redshirt_count)) |>
+  filter(redshirt_count > 1)
 #
  
 ```
 
 ### Sentence 4
 
--   **Sentence text**: MLB owners have donated the most
--   **Analysis summary**: We were able to show in our analysis that MLB owners have donated the most compared to owners from other leagues. One discrepancy between our analysis and the one in the story is that the amounts in each category are slightly less. This is likely due to the fact that when we cleaned up the data, we noticed that many donations were categorized as "Bipartisan but mostly specific party)." So, we mutated a new column to label all of those as Bipartisan for cleaner analysis. Because of this, our amounts are slightly off from the story because they don't account for those donations in any specific party.
+-   **Sentence text**:
+-   **Analysis summary**:
 
 ```{r}
 # Put code to reverse engineer sentence here
@@ -149,8 +159,8 @@ wbb_positions_2023 <- wbb_2023 |>
 
 ### Sentence 5
 
--   **Sentence text**: Thirteen owners have contributed directly to Trump’s campaign or Trump super PACs in the 2020 election cycle, with contributions adding up to \$1,746,423. That list of owners includes:
--   **Analysis summary**: We were not able to replicate this finding. We found 12 of the 13 owners mentioned in the article that donated directly to Trump's campaign in the 2020 election cycle. We could not find Carolina Hurricane owner Peter Karmanos' donations to Trump. When filtering through his name on the entire table, we could not find any of donations with a recipient of Trump or his campaign. This is why his name did not appear on this specific list. This is why there is a \$202,002 discrepancy between the total amount we found and the one mentioned in the story.
+-   **Sentence text**:
+-   **Analysis summary**:
 
 ```{r}
 # Put code to reverse engineer sentence here
