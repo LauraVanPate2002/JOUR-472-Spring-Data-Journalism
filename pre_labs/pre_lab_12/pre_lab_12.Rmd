@@ -252,7 +252,7 @@ So this block is is going to do the following:
 
 ```{r}
 releases |>
-  filter(date < '2022-01-01') |>
+  filter(fiscal_year < '2022-01-01') |>
   unnest_tokens(bigram, text, token = "ngrams", n = 2) |>
   separate(bigram, c("word1", "word2"), sep = " ") |>
   filter(!word1 %in% stop_words$word) |>
