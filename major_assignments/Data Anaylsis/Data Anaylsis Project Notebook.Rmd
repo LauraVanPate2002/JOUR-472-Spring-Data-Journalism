@@ -144,15 +144,23 @@ redshirt_23 <- wbb_2023 |>
 
 ### Sentence 4
 
--   **Sentence text**:
--   **Analysis summary**:
+-   **Sentence text**: How many players are from Maryland each year? Does the numbers increase or decrease
+-   **Analysis summary**: There were 352 players for 2020 from Maryland, 345 players from Maryland in 2021, 350 players from Maryland in 2022, and then 336 players from Maryland in 2023. This shows that players from Maryland went down sightly from 2020 to 2021, and then went up again in 2022, though 2022 was still a smaller number than 2020, and then players from Maryland decreased by 14 in 2023, being the largest change.
 
 ```{r}
 # Put code to reverse engineer sentence here
 #
+MD_Players_2020 <- wbb_2020 |>
+  filter(str_detect(homestate, 'Maryland' ))
 
+MD_Players_2021 <- wbb_2021 |>
+  filter(str_detect(homestate, 'Maryland' ))
 
+MD_Players_2022 <- wbb_2022 |>
+  filter(str_detect(homestate, 'Maryland' ))
 
+MD_Players_2023 <- wbb_2023 |>
+  filter(str_detect(homestate, 'Maryland' ))
 # Display results of code below this codeblock
 
 ```

@@ -111,35 +111,10 @@ atty_trigram <- md_attorney_sanctions |>
 
 ```{r}
 attorney_trust_account <- md_attorney_sanctions |>
-  filter(fiscal_year == 2023) |>
-  filter(text == attorney_trust_account)
-  filter(fiscal_year == 2022) |>
-  filter(text == attorney_trust_account) |>
-  filter(fiscal_year == 2021) |>
-  filter(text == attorney_trust_account) |>
-  filter(fiscal_year == 2020) |>
-  filter(text == attorney_trust_account) |>
-  filter(fiscal_year == 2019) |>
-  filter(text == attorney_trust_account) |>
-  filter(fiscal_year == 2018) |>
-  filter(text == attorney_trust_account) |>  
-  filter(fiscal_year == 2017) |>
-  filter(text == attorney_trust_account) |>  
-  filter(fiscal_year == 2016) |>
-  filter(text == attorney_trust_account) |> 
-  filter(fiscal_year == 2015) |>
-  filter(text == attorney_trust_account) |>
-  filter(fiscal_year == 2014) |>
-  filter(text == attorney_trust_account) |>
-  filter(fiscal_year == 2013) |>
-  filter(text == attorney_trust_account) |>
-  filter(fiscal_year == 2012) |>
-  filter(text == attorney_trust_account) |> 
-  filter(fiscal_year == 2011) |>
-  filter(text == attorney_trust_account) |>
-  tally(sort=TRUE) |>
-  mutate(percent = (n/sum(n))*100) 
-  
+ filter(str_detect(text, 'attorney trust account')) |>
+  group_by(fiscal_year) |>
+  summarize(count = n())
+  tally(sort=TRUE)
     
 ```
 
