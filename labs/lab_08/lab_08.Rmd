@@ -54,10 +54,7 @@ Compare the results here to those from the pre_lab_08 bar chart - are there majo
 
 ```{r}
 PG_Calls <- PG_Calls |>
-  group_by(month) |>
-  summarize(total_calls = n()/1397*100) |>
-  arrange(desc(total_calls)) |>
-  mutate(pct_total = total_calls)
+  mutate(over)
  
 
 ```
