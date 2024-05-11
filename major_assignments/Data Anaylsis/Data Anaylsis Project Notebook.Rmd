@@ -49,6 +49,8 @@ wbb_2022 <-read_csv('data/wbb_rosters_2022_23.csv') |> clean_names()
 wbb_2023 <-read_csv('data/wbb_rosters_2023_24.csv') |> clean_names()
 
 wbb_crosswalk <-read_csv('data/wbb_rosters23_crosswalk.csv') |> clean_names()
+
+wbb_combined <- bind_rows(list(wbb_2023, wbb_2022, wbb_2021, wbb_2020))
 # Path to data should be loaded from folder "data" i.e. read_csv(
 # Clean required data and prepare for analysis if needed. 
 
@@ -61,9 +63,9 @@ In this notebook, we are reverse engineering five sentences from the story.
 
 ### Sentence 1
 
--   **Sentence text**: [What is the average height of players of each year and what town do they come from]
+-   **Sentence text**: [What is the average height of players of 2020, 2022, and 2023, and what town do they come from]
 
--   **Analysis summary**: [So far the year 2020 had the highest average of players with 81 inches, and each year had a group of cities tied for the highest average of height, such as Rio, Brazil, Miami, Flordia, and Appleton, Wisconsin. A problem we had was we couldn't load 2021 because there was no total inches column. When doing the feet in 2020, the largest height was 6.75 feet. In 2022 and 2023 the largest height was 6.583 ft.
+-   **Analysis summary**: [So far the year 2020 had the highest average of players with 81 inches, and each year had a group of cities tied for the highest average of height, such as Rio, Brazil, Miami, Florida, and Appleton, Wisconsin. A problem we had was we couldn't load 2021 because there was no total inches column. When doing the feet in 2020, the largest height was 6.75 feet. In 2022 and 2023 the largest height was 6.583 ft.
 
 ```{r}
 # Put code to data anaylsis sentence here
@@ -127,7 +129,7 @@ wbb_positions_2023 <- wbb_2023 |>
 ### Sentence 3
 
 -   **Sentence text**: In the years 2022 and 2023, how many teams had more than 1 redshirt on their team? What team had the most, and where are they from
--   **Analysis summary**: In 2022 Grand Valley State in Michigan had the most red shirts with 12 and in 2023 Biola in California had the most red shirts 10.
+-   **Analysis summary**: In 2022 Grand Valley State in Michigan had the most red shirts with 12 and in 2023 Biola in California had the most red shirts 10. For both years combined, Cal St. San Marcos in California had the most with 32.
 
 ```{r}
 # Put code to reverse engineer sentence here
@@ -139,6 +141,12 @@ redshirt_22 <-wbb_2022 |>
 redshirt_23 <- wbb_2023 |>
   group_by(team, team_state) |>
   summarise(redshirt_count = sum(redshirt)) |> arrange(desc (redshirt_count)) |>
+  filter(redshirt_count > 1) 
+
+all_redshirt <- wbb_combined |>
+  group_by(team, team_state) |>
+  summarise(redshirt_count = sum(redshirt)) |>
+  arrange(desc(redshirt_count)) |>
   filter(redshirt_count > 1)
 #
  
@@ -169,13 +177,31 @@ MD_Players_2023 <- wbb_2023 |>
 
 ### Sentence 5
 
--   **Sentence text**:
--   **Analysis summary**:
+-   **Sentence text**: We wanted to find the state with the most college women's basketball players from each year.
+-   **Analysis summary**: In 2020, we discovered the Pennsylvania had the most with 894, In 2021 it was Pennsylvania again this time with 924. In 2022 Pennsylvania had the most again with 908. And in 2023 Pennsylvania had the most with 894. Each year Texas had the second most and Ohio had the third most with New York and Illinois flopping between fourth and fifth place.
 
 ```{r}
-# Put code to reverse engineer sentence here
+# Put code to data analysis sentence here
 #
+wbb_states_2020 <- wbb_2020 |>
+  group_by(homestate) |>
+  summarize(count = n()) |>
+  arrange(desc(count))
 
+wbb_states_2021 <- wbb_2021 |>
+  group_by(homestate) |>
+  summarize(count = n()) |>
+  arrange(desc(count))
+
+wbb_states_2022 <- wbb_2022 |>
+  group_by(homestate) |>
+  summarize(count = n()) |>
+  arrange(desc(count))
+
+wbb_states_2023 <- wbb_2023 |>
+  group_by(homestate) |>
+  summarize(count = n()) |>
+  arrange(desc(count))
 # Display results of code below this codeblock
 
 ```
